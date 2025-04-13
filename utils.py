@@ -112,7 +112,8 @@ def train_and_evaluate(model, device, train_loader, test_loader, optimizer, crit
     test_losses = []
     test_accuracies = []
     best_acc = 0.0
-
+    best_epoch = -1
+    
     for epoch in range(1, num_epochs + 1):
         train_loss = train(model, device, train_loader, optimizer, criterion, epoch)
         test_loss, acc = test(model, device, test_loader, criterion)
@@ -122,11 +123,12 @@ def train_and_evaluate(model, device, train_loader, test_loader, optimizer, crit
         test_accuracies.append(acc)
 
         if acc > best_acc:
+            best_epoch = epoch
             best_acc = acc
             torch.save(model.state_dict(), f'best_{model_name}.pth')
             print(f"[{model_name}] Best model saved (Epoch {epoch}, Accuracy: {acc:.2f}%)")
 
     print(f"[{model_name}] Training complete. Best accuracy: {best_acc:.2f}%")
 
-    return train_losses, test_losses, test_accuracies
+    return train_losses, test_losses, test_accuracies, best_epoch
 

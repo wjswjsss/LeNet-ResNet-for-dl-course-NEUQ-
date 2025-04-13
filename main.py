@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import matplotlib.pyplot as plt
+import csv
 
 # from nets import LeNetWithResBlock, LeNet
 from utils import get_dataloaders, train, test, train_and_evaluate
@@ -26,7 +27,7 @@ def main():
     """    
     Hyper-parameters
     """    
-    num_epochs = 50
+    num_epochs = 100
     learning_rate = 0.001
     batch_size = 64
 
@@ -36,19 +37,35 @@ def main():
     train_loader, test_loader = get_dataloaders(batch_size)
 
     """
-    Model 1 - LeNet-5
+    Model 1 - LeNet-5          PLUS saving the metrics
     """
     model1 = LeNetCIFAR10().to(device)
     optimizer1 = optim.Adam(model1.parameters(), lr=learning_rate)
     criterion = nn.CrossEntropyLoss()
     lenet_metrics = train_and_evaluate(model1, device, train_loader, test_loader, optimizer1, criterion, num_epochs, "lenet")
+    
+    train_losses, test_losses, test_accuracies, best_epoch_le = lenet_metrics
+
+    with open("lenet_metrics.csv", "w", newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(["Epoch", "Train Loss", "Test Loss", "Test Accuracy"])
+        for i in range(num_epochs):
+            writer.writerow([i+1, train_losses[i], test_losses[i], test_accuracies[i]])
 
     """
-    Model 2 - LeNet + ResBlock
+    Model 2 - LeNet + ResBlock PLUS saving the metrics
     """
     model2 = ResLeNet().to(device)
     optimizer2 = optim.Adam(model2.parameters(), lr=learning_rate)
     resblock_metrics = train_and_evaluate(model2, device, train_loader, test_loader, optimizer2, criterion, num_epochs, "lenet_resblock")
+
+    train_losses, test_losses, test_accuracies, best_epoch_res = resblock_metrics
+
+    with open("resblock_metrics.csv", "w", newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(["Epoch", "Train Loss", "Test Loss", "Test Accuracy"])
+        for i in range(num_epochs):
+            writer.writerow([i+1, train_losses[i], test_losses[i], test_accuracies[i]])
 
     """
     Plotting 
@@ -65,6 +82,10 @@ def main():
     ax1.plot(epochs, resblock_metrics[1], 'red', marker='^', label="ResBlock Test Loss")
     ax1.grid(True)
 
+    # Mark best epoch for LeNet and ResBlock
+    ax1.axvline(x=best_epoch_le, color='blue', linestyle='--', linewidth=1.5, label=f'LeNet Best Epoch ({best_epoch_le})')
+    ax1.axvline(x=best_epoch_res, color='red', linestyle='--', linewidth=1.5, label=f'ResBlock Best Epoch ({best_epoch_res})')
+    
     # Secondary y-axis for accuracy
     ax2 = ax1.twinx()
     ax2.set_ylabel("Accuracy (%)", color='green')
