@@ -15,7 +15,7 @@ The models are trained and evaluated using PyTorch, with performance metrics plo
 ---
 
 ## 📈 RESULT
-![Model Comparison](./comparison_lenet_resblock.png)
+![Model Comparison](./picture_for_report/comparison_lenet_resblock.png)
 
 ---
 
@@ -68,7 +68,7 @@ The enhanced version, referred to as *LeNet with ResBlocks*, builds upon the ori
 ## CIFAR-10
 
 Some of the samples: 
-![samples](./cifar10_sample.png)
+![samples](./picture_for_report/cifar10_sample.png)
 
 ---
 
