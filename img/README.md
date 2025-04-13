@@ -1,0 +1,1 @@
+This is the picture I put in the repo's README.md
