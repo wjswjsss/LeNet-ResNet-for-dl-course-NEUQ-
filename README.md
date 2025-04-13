@@ -21,11 +21,11 @@ The models are trained and evaluated using PyTorch, with performance metrics plo
 
 ## ⚡ Quick Start 
 
-To run this program, first (highly RECOMMENDED)
+To run this program, first (highly recommended)
 
 ```bash
-conda create -n dlCourse python=3.10
-conda activate dlCourse
+conda create -n dlCourseNEUQ python=3.10
+conda activate dlCourseNEUQ
 ```
 
 to create a new virtual environment.
